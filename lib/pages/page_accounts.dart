@@ -150,8 +150,15 @@ class AccountCard extends StatelessWidget {
                         'Баланс ${account.balance.ceilToDouble()}',
                         // style:  TextStyle(color: Colors.black.withOpacity(0.6)),
                       ),
+
+                      // Container(
+                      //     width: double.infinity,
+                      //     // color: Colors.grey,
+                      //     child:
+                      //         Text('по стостоянию на ' + account.actualDate)),
                     ],
                   ),
+                  Text('по стостоянию на ' + account.actualDate),
                   const SizedBox(
                     height: 10,
                   ),

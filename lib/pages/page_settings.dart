@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/setting_app_provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'package:dart_config/package_info.dart';
 
@@ -140,6 +141,24 @@ class SettingsPage extends StatelessWidget {
                 icon: const Icon(Icons.save),
                 label: const Text('Сохранить'),
               ),
+              Expanded(
+                child: FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.done:
+                        return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            'Версия: ${snapshot.data!.version}',
+                          ),
+                        );
+                      default:
+                        return const SizedBox();
+                    }
+                  },
+                ),
+              )
             ],
           ),
         ),
