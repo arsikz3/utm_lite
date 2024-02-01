@@ -32,7 +32,7 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
   @override
   void initState() {
     host = Provider.of<SettingsAppProvider>(context, listen: false).getIpServer;
-
+    log('host init' + host);
     updateUserToken(host);
     super.initState();
   }
@@ -201,8 +201,8 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
             borderRadius: BorderRadius.circular(10), gradient: gradientcolor),
         child: ListTile(
           onTap: () async {
-            // var settingsApp;
             Navigator.of(context).push(MaterialPageRoute(
+
                 // builder: (context) => AccountPage(currentUser: user)));
                 builder: (context) =>
                     TabLayoutAccount(host: host, currentUser: user)));
@@ -278,11 +278,11 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
     );
   }
 
-  void getUserAcc(String host, User user) async {
-    log('до getUserAccounts${user.accounts[0].actualDate}');
-    await getUserAccounts(host, user);
-    log('после getUserAccounts${user.accounts[0].actualDate}');
-  }
+  // void getUserAcc(String host, User user) async {
+  //   log('до getUserAccounts${user.accounts[0].actualDate}');
+  //   await getUserAccounts(host, user);
+  //   log('после getUserAccounts${user.accounts[0].actualDate}');
+  // }
 
   void updateUserToken(String host) async {
     List<User> users = [];

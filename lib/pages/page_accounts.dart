@@ -32,7 +32,6 @@ class _TabLayoutAccountState extends State<TabLayoutAccount>
   void initState() {
     super.initState();
     events = true;
-
     _tabController = TabController(length: 0, vsync: this); //было убрано
 
     getAcc();
@@ -118,6 +117,7 @@ class AccountCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        shadowColor: Colors.red,
         elevation: 10,
         // color: Colors.blue,
         clipBehavior: Clip.antiAlias,
@@ -158,7 +158,8 @@ class AccountCard extends StatelessWidget {
                       //         Text('по стостоянию на ' + account.actualDate)),
                     ],
                   ),
-                  Text('по стостоянию на ' + account.actualDate),
+                  Text('по стостоянию на ${account.actualDate}',
+                      style: const TextStyle(fontSize: 12)),
                   const SizedBox(
                     height: 10,
                   ),
