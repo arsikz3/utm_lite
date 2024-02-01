@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           : ThemeData(
               cardTheme: const CardTheme(color: Colors.blue),
               colorScheme: ColorScheme.fromSeed(
-                  background: Colors.blue[100],
+                  background: Color.fromARGB(221, 165, 202, 248),
                   seedColor: Colors.blueAccent,
                   brightness: Brightness.light),
               useMaterial3: true,

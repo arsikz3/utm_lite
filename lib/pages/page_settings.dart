@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,8 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ipServerController = TextEditingController();
     final portServerController = TextEditingController();
+    final bool mounted;
+    mounted = true;
 
     // PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // String version = packageInfo.version;
@@ -65,7 +69,8 @@ class SettingsPage extends StatelessWidget {
               ),
               const Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(' Адрес сервера')),
+                  child: Text(' Адрес сервера (domain)')),
+
               TextField(
                   controller: ipServerController,
                   // style: const TextStyle(
@@ -78,7 +83,33 @@ class SettingsPage extends StatelessWidget {
                       // labelText: 'Адрес сервера',
                       // fillColor: Colors.black12,
                       filled: true)),
-              const Align(alignment: Alignment.centerLeft, child: Text(' ')),
+              InkWell(
+                onTap: () async {
+                  try {
+                    final result =
+                        await InternetAddress.lookup(ipServerController.text);
+                    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          duration: Duration(seconds: 1),
+                          backgroundColor: Colors.green,
+                          content: Text('проверка прошла успешно')));
+                    }
+                  } on SocketException catch (_) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        duration: Duration(seconds: 1),
+                        backgroundColor: Colors.red,
+                        content: Text('проверка не пройдена')));
+                  }
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text("Проверка сервера"),
+                ),
+              ),
+
+              // const Align(alignment: Alignment.centerLeft, child: Text(' ')),
               const SizedBox(
                 height: 20,
                 child: Divider(),
@@ -98,6 +129,7 @@ class SettingsPage extends StatelessWidget {
               // const SizedBox(
               //   height: 15,
               // ),
+
               ElevatedButton.icon(
                 onPressed: () {
                   Provider.of<SettingsAppProvider>(context, listen: false)

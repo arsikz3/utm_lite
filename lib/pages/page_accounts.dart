@@ -118,6 +118,7 @@ class AccountCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        elevation: 10,
         // color: Colors.blue,
         clipBehavior: Clip.antiAlias,
         child: Column(
