@@ -1,5 +1,3 @@
-const String hostOld = 'utm.ugtrans.net';
-
 const String customerApiLogin = '/customer_api/login';
 const String customerApiProfile = '/customer_api/auth/profile';
 const String changeAccountIntstatus =
@@ -11,8 +9,6 @@ const String customerApiStatistics = '/customer_api/auth/statistics';
 const String customerApiFullStatistics = '/customer_api/auth/full_statistics';
 
 class UtmApiConst {
-  static const String host = 'https://utm.ugtrans.net';
-
   static const String promisedPaymentSettings =
       '/customer_api/auth/promisedpaymentsettings';
   static const String customerApiFullStatistics =
