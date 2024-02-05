@@ -84,8 +84,8 @@ class SettingsPage extends StatelessWidget {
                       // labelText: 'Адрес сервера',
                       // fillColor: Colors.black12,
                       filled: true)),
-              InkWell(
-                onTap: () async {
+              TextButton(
+                onPressed: () async {
                   try {
                     final result =
                         await InternetAddress.lookup(ipServerController.text);
@@ -104,10 +104,7 @@ class SettingsPage extends StatelessWidget {
                         content: Text('проверка не пройдена')));
                   }
                 },
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Проверка сервера"),
-                ),
+                child: const Text("Проверка сервера"),
               ),
 
               // const Align(alignment: Alignment.centerLeft, child: Text(' ')),

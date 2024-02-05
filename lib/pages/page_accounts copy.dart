@@ -1,14 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import '../functions/finctions.dart';
 import '../functions/get_data.dart';
 // import 'package:uttcabinet_plus/model/account.dart';
 import '../model/account_plus.dart';
 import '../model/user.dart';
-import '../provider/setting_app_provider.dart';
 // import '../pages/page_acc_services.dart';
 
 // import '../widgets/promised_payments.dart';
@@ -23,17 +21,24 @@ class TabLayoutAccount extends StatefulWidget {
   State<TabLayoutAccount> createState() => _TabLayoutAccountState();
 }
 
-class _TabLayoutAccountState extends State<TabLayoutAccount> {
+class _TabLayoutAccountState extends State<TabLayoutAccount>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
   List<Tab> acc = [];
+  // List<AccountPlus> accounts = <AccountPlus>[];
   List<AccountPlus> accounts = <AccountPlus>[];
   bool events = false;
+  // int _selectedTabbar = 0;
 
   @override
   void initState() {
     super.initState();
     events = true;
+    _tabController = TabController(length: 0, vsync: this); //было убрано
 
     getAcc();
+    // _tabController = TabController(length: accounts.length, vsync: this); //было убрано
+    // _tabController.animateTo(2);
   }
 
   void getAcc() async {
@@ -50,13 +55,17 @@ class _TabLayoutAccountState extends State<TabLayoutAccount> {
     for (var element in accounts) {
       acc.add(Tab(child: Text('л/счет ${element.id.toString()}')));
     }
+    _tabController = TabController(length: accounts.length, vsync: this);
+    // _tabController.animateTo(0);
     setState(() {
       events = false;
     });
+    // events = false;
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -90,10 +99,7 @@ class _TabLayoutAccountState extends State<TabLayoutAccount> {
           : ListView.builder(
               itemCount: accounts.length,
               itemBuilder: (context, index) {
-                // return AccountCard(account: accounts[index]);
-                return ChangeNotifierProvider(
-                    create: (context) => accounts[index],
-                    child: AccountCard(account: accounts[index]));
+                return AccountCard(account: accounts[index]);
               },
             ),
     );
@@ -110,7 +116,6 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AccountPlus acc = Provider.of<AccountPlus>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -180,20 +185,18 @@ class AccountCard extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    log(acc.getActualDate);
-                    Provider.of<AccountPlus>(context, listen: false)
-                        .updateProps;
-                    log(acc.actualDate);
+                    log(account.getActualDate);
+                    account.actualDate = DateTime.now().toString();
+                    log(account.actualDate);
                     // Perform some action
                   },
                   child: const Text('ACTION 1'),
                 ),
                 TextButton(
                   onPressed: () {
-                    // Provider.of<AccountPlus>(context, listen: false)
-                    //     .updateProps;
+                    // Perform some action
                   },
-                  child: Text(acc.getActualDate + acc.actualDateStr),
+                  child: Text(account.getActualDate),
                 ),
               ],
             ),

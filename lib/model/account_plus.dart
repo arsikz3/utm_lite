@@ -63,16 +63,25 @@ class AccountPlus extends ObjectDatabase with ChangeNotifier {
   }
 
   String get getActualDate {
-    return actualDate;
+    return actualDateStr;
   }
 
-  var _count = 33;
+  // var _count = 33;
   var _actualDateStr = 'actualDate';
-  int get count => _count;
+
+  // int get count => _count;
+
   String get actualDateStr => _actualDateStr;
+
+  set actualDateStr(String newDate) {
+    _actualDateStr = newDate;
+    // notifyListeners();
+  }
+
   void updateProps() {
-    _count++;
-    _actualDateStr = actualDate;
+    // _count++;
+    // _actualDateStr = actualDate;
+    _actualDateStr = DateTime.now().toString();
     notifyListeners();
   }
 

@@ -23,6 +23,8 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('users');
   await Hive.openBox<SettingsApp>('settingsAppBox');
-  runApp(ChangeNotifierProvider(
-      create: (context) => SettingsAppProvider(), child: const MyApp()));
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => SettingsAppProvider(), child: const MyApp()),
+  );
 }
