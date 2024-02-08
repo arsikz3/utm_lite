@@ -1,68 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import '../functions/finctions.dart';
+
 import '../functions/get_data.dart';
-// import 'package:uttcabinet_plus/model/account.dart';
 import '../model/account_plus.dart';
 import '../model/user.dart';
-import '../provider/setting_app_provider.dart';
-// import '../pages/page_acc_services.dart';
+import '../widgets/account_card.dart';
 
-// import '../widgets/promised_payments.dart';
-
-class TabLayoutAccount extends StatefulWidget {
+class AccountsPage extends StatelessWidget {
   final User currentUser;
   final String host;
-  const TabLayoutAccount(
+  const AccountsPage(
       {super.key, required this.currentUser, required this.host});
 
   @override
-  State<TabLayoutAccount> createState() => _TabLayoutAccountState();
-}
-
-class _TabLayoutAccountState extends State<TabLayoutAccount> {
-  List<Tab> acc = [];
-  List<AccountPlus> accounts = <AccountPlus>[];
-  bool events = false;
-
-  @override
-  void initState() {
-    super.initState();
-    events = true;
-
-    getAcc();
-  }
-
-  void getAcc() async {
-    List<AccountPlus> accountsPlus = [];
-
-    accountsPlus = await getUserAccounts(widget.host, widget.currentUser);
-    if (accountsPlus.isNotEmpty) {
-      accounts = accountsPlus;
-    } else {
-      accounts = widget.currentUser.accounts;
-    }
-
-    // accounts = widget.currentUser.accounts;
-    for (var element in accounts) {
-      acc.add(Tab(child: Text('л/счет ${element.id.toString()}')));
-    }
-    setState(() {
-      events = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // print(acc.length);
     return Scaffold(
       appBar: AppBar(
         actions: const [
@@ -83,122 +34,30 @@ class _TabLayoutAccountState extends State<TabLayoutAccount> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        // backgroundColor: Colors.blue,
       ),
-      body: events
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: accounts.length,
-              itemBuilder: (context, index) {
-                // return AccountCard(account: accounts[index]);
-                return ChangeNotifierProvider(
-                    create: (context) => accounts[index],
-                    child: AccountCard(account: accounts[index]));
-              },
-            ),
-    );
-  }
-}
-
-class AccountCard extends StatelessWidget {
-  const AccountCard({
-    super.key,
-    required this.account,
-  });
-
-  final AccountPlus account;
-
-  @override
-  Widget build(BuildContext context) {
-    AccountPlus acc = Provider.of<AccountPlus>(context, listen: true);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shadowColor: Colors.red,
-        elevation: 10,
-        // color: Colors.blue,
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              // leading: const Icon(Icons.account_balance_wallet_outlined),
-              title: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('Лицевой счет ${account.id}'),
-                    ],
-                  ),
-                  const Divider(),
-                ],
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.account_balance_wallet_outlined),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Баланс ${account.balance.ceilToDouble()}',
-                        // style:  TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-
-                      // Container(
-                      //     width: double.infinity,
-                      //     // color: Colors.grey,
-                      //     child:
-                      //         Text('по стостоянию на ' + account.actualDate)),
-                    ],
-                  ),
-                  Text('по стостоянию на ${account.actualDate}',
-                      style: const TextStyle(fontSize: 12)),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    'Текущий тариф: ',
-                    style: TextStyle(fontSize: 14),
-                    // style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                  Text(
-                    getTariff(account.id, account.tariffs),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            ),
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    log(acc.getActualDate);
-                    Provider.of<AccountPlus>(context, listen: false)
-                        .updateProps;
-                    log(acc.actualDate);
-                    // Perform some action
+      body: FutureBuilder<List<AccountPlus>>(
+        future: getUserAccounts(host, currentUser),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  // shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ChangeNotifierProvider(
+                        create: (context) => snapshot.data![index],
+                        child: AccountCard(account: snapshot.data![index]));
                   },
-                  child: const Text('ACTION 1'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Provider.of<AccountPlus>(context, listen: false)
-                    //     .updateProps;
-                  },
-                  child: Text(acc.getActualDate + acc.actualDateStr),
-                ),
-              ],
-            ),
-          ],
-        ),
+                );
+              } else {
+                return const Center(child: Text('не удалось загрузть данные'));
+              }
+
+            default:
+              return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

@@ -1,3 +1,7 @@
+// import 'dart:math';
+
+import 'dart:developer';
+
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -62,26 +66,29 @@ class AccountPlus extends ObjectDatabase with ChangeNotifier {
     return intStatus;
   }
 
-  String get getActualDate {
-    return actualDateStr;
-  }
-
   // var _count = 33;
-  var _actualDateStr = 'actualDate';
+  var _actualDateStr = '';
 
   // int get count => _count;
 
-  String get actualDateStr => _actualDateStr;
+  // String get getActualDate {
+  //   return actualDateStr;
+  // }
+
+  String get getActualDate {
+    return _actualDateStr;
+  }
 
   set actualDateStr(String newDate) {
+    actualDate = newDate;
     _actualDateStr = newDate;
-    // notifyListeners();
+
+    notifyListeners();
   }
 
   void updateProps() {
     // _count++;
-    // _actualDateStr = actualDate;
-    _actualDateStr = DateTime.now().toString();
+    _actualDateStr = actualDate;
     notifyListeners();
   }
 
@@ -99,7 +106,7 @@ class AccountPlus extends ObjectDatabase with ChangeNotifier {
         // actualDate = DateTime.now().convertToSqlFormat();
         // actualDate = DateFormat('d.M.y H:mm:ss').format(DateTime.now()
         //     .add(const Duration(hours: 3, minutes: 29, seconds: 22)));
-        actualDate = DateFormat('d.M.y H:mm:ss')
+        actualDate = DateFormat('dd.MM.y H:mm:ss')
             .format(DateTime.now().add(const Duration(hours: 3)));
 }
 

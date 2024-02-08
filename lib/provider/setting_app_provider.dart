@@ -21,13 +21,12 @@ class SettingsAppProvider extends ChangeNotifier {
   //         portServer: '',
   //         serverIP: box.get('settings')!.serverIP,
   //         darkTheme: box.get('settings')!.darkTheme);
-  //     _serverIP =
-  //         Hive.box<SettingsApp>('settingsAppBox').get('settings')!.serverIP;
+  //     // _serverIP =Hive.box<SettingsApp>('settingsAppBox').get('settings')!.serverIP;
   //     _serverPort =
   //         Hive.box<SettingsApp>('settingsAppBox').get('settings')!.portServer;
   //   } else {
   //     _settingsApp = SettingsApp(
-  //         portServer: '', serverIP: 'www.provider.net', darkTheme: false);
+  //         portServer: '', serverIP: 'www.cabinet.net', darkTheme: false);
   //   }
 
   //   // _settingsApp = box.get('settings', defaultValue: SettingsApp(portServer: '', serverIP: '', darkTheme: false))!;
@@ -84,6 +83,7 @@ class SettingsAppProvider extends ChangeNotifier {
     _settingsApp.serverIP = ipServer;
     _settingsApp.portServer = portServer;
     box.put('settings', _settingsApp);
+    _settingsApp.save();
     notifyListeners();
   }
 

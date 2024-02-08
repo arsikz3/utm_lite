@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -31,14 +32,13 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
 
   @override
   void initState() {
-    host = Provider.of<SettingsAppProvider>(context, listen: false).getIpServer;
-    log('host init' + host);
-    updateUserToken(host);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    host = Provider.of<SettingsAppProvider>(context, listen: true).getIpServer;
+    updateUserToken(host);
     return SafeArea(
       child: Scaffold(
         // drawerScrimColor: Colors.transparent,
@@ -82,7 +82,6 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
           valueListenable: BoxUsers.getUsers().listenable(),
           builder: (context, box, _) {
             final users = box.values.toList().cast<User>();
-
             return buildContent(users);
           },
         ),
@@ -201,11 +200,28 @@ class _UsersLoginPageState extends State<UsersLoginPage> {
             borderRadius: BorderRadius.circular(10), gradient: gradientcolor),
         child: ListTile(
           onTap: () async {
-            Navigator.of(context).push(MaterialPageRoute(
-
-                // builder: (context) => AccountPage(currentUser: user)));
-                builder: (context) =>
-                    TabLayoutAccount(host: host, currentUser: user)));
+            // log(user.token);
+            try {
+              final result = await InternetAddress.lookup(host);
+              if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                if (!mounted) return;
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      // builder: (context) => AccountPage(currentUser: user)));
+                      builder: (context) =>
+                          // AccountPage(host: host, currentUser: user),
+                          AccountsPage(host: host, currentUser: user)),
+                );
+              }
+            } on SocketException catch (_) {
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: Colors.red,
+                    content: Text('Нет связи с сервером $host')),
+              );
+            }
           },
           textColor: Colors.white,
           title: Row(

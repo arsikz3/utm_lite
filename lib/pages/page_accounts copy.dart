@@ -185,7 +185,7 @@ class AccountCard extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    log(account.getActualDate);
+                    log(account.actualDate);
                     account.actualDate = DateTime.now().toString();
                     log(account.actualDate);
                     // Perform some action
@@ -196,7 +196,7 @@ class AccountCard extends StatelessWidget {
                   onPressed: () {
                     // Perform some action
                   },
-                  child: Text(account.getActualDate),
+                  child: Text(account.actualDate),
                 ),
               ],
             ),

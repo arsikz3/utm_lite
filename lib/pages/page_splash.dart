@@ -10,13 +10,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provider.of<SettingsAppProvider>(context, listen: true).initSettingsAppBox;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Provider.of<SettingsAppProvider>(context, listen: true).isDarkTheme
           // ? ThemeData.dark()
           // : ThemeData.light(),
           ? ThemeData(
-              cardTheme: const CardTheme(color: Colors.black),
+              cardTheme:
+                  const CardTheme(color: Color.fromARGB(255, 37, 36, 36)),
               colorScheme: ColorScheme.fromSeed(
 
                   // background: Colors.grey[100],

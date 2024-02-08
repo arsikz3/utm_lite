@@ -19,7 +19,7 @@ Future<String> getUserTokenPlus(
   // var url = Uri.http('192.109.243.13:8000', '/customer_api/login');
   var url = Uri.https(host, customerApiLogin);
   Map data = {'login': prmLogin, 'password': prmPasswd};
-  // print(data);
+
   // Fluttertoast.showToast(msg: data.toString());
 
   var body = convert.json.encode(data);
@@ -29,6 +29,7 @@ Future<String> getUserTokenPlus(
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.json.decode(response.body);
+
       return (jsonResponse["sid_customer"]);
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -89,7 +90,7 @@ Future<List<User>> getUserPlus(
         accPlus = AccountPlus.fromJson(item);
         accountsPlus.add(accPlus);
       }
-      log('2222');
+
       user = User.fromJson(jsonResponse);
       user.token = token;
       user.accounts = accountsPlus;
@@ -121,6 +122,7 @@ Future<List<AccountPlus>> getUserAccounts(String utmHost, User user) async {
   var url = Uri.https(utmHost, customerApiProfile);
 
   token = user.token;
+
   // log('Service Link Get. Token: $token');
   try {
     http.Response response = await http.get(
@@ -154,7 +156,8 @@ Future<List<AccountPlus>> getUserAccounts(String utmHost, User user) async {
       // final res = box.values;
       // print('после getData: ' + res.first.accounts[0].actualDate.toString());
     } else {
-      log('Request failed with status: ${response.statusCode}.');
+      log('token ' + token);
+      log('Request2 failed with status: ${response.statusCode}.');
     }
   } on TimeoutException catch (e) {
     log(e.toString());
